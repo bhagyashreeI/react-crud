@@ -1,0 +1,24 @@
+  .Modal {
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      right: 40px;
+      bottom: 40px;
+      border: 1px solid;
+      padding: 20px;
+      background-color: rgb(196, 180, 212);
+      border-radius: 10px;
+  }
+
+  .Overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgb(250, 247, 253);
+  }
+
+  h1 {
+    text-align: center;
+  }
