@@ -7,12 +7,7 @@ import Add from './components/Controls/Modal/Add/Add';
 class App extends Component{
   state = {
     showButton:true,
-    showAddModal:false,
-    users:[
-      { id: 'p1', name: 'Shree', age: 31 },
-      { id: 'p2', name: 'Yuga', age: 30 },
-      { id: 'p3', name: 'Tanuja', age: 26 }
-    ]
+    showAddModal:false
   };
 
   handleModal = () => {
@@ -44,10 +39,21 @@ class App extends Component{
         <div >
             <Control type="Add" color="success"  clicked={this.handleAddUser} openmodal={this.handleModal} />
             <Control type="Refresh" color="primary" />
-          
             {addmodal}
-            
-            <Users users={this.state.users}></Users>
+            <div className="container">
+              <h3 className="p-3 text-center">Users</h3>
+              <table className="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <Users />
+                </tbody>
+              </table>
+            </div>
         </div>
         )
       }

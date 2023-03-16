@@ -1,12 +1,19 @@
 import React, {Component} from 'react';
 
+import Control from '../../../components/Controls/Control';
+
 class User extends Component{
     render(){
         return(
-            <div>
-                <div>Name:{this.props.name}</div>
-                <div>Age:{this.props.age}</div>
-            </div>
+            <tr key={this.props.id}>
+                            <td>{this.props.name}</td>
+                            <td>{this.props.email}</td>
+                            <td>
+                                <Control type="Edit" color="primary" />
+                                <Control type="Delete" color="danger" />
+                            </td>
+                        </tr>
+            
         )
     }
 }

@@ -5,9 +5,13 @@ class Add extends Component{
     handleSaveUser = (uaction) => {
         alert(uaction)
     }
+    closeModal = () => {
+        
+    }
     render(){
             return (
                 <div className="Modal">
+                    <button type="button" className="btn-close" aria-label="Close" onClick={this.closeModal}>&times;</button>
                     <h1>Add User</h1>
                     <div>
                         <label>Name: </label><input type="text" name="name" />
@@ -16,6 +20,8 @@ class Add extends Component{
                         <button onClick={() => this.handleSaveUser('next')}>Save & Next</button>
                     </div>
                 </div>
+
+                
             )
         
         
