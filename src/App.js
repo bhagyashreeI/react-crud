@@ -5,13 +5,17 @@ import Users from './containers/Users/Users';
 import Add from './components/Controls/Modal/Add/Add';
 
 class App extends Component{
-  state = {
-    showButton:true,
-    showAddModal:false
-  };
+  constructor(props) {
+    super(props)
+    this.handleModal = this.handleModal.bind(this);
+    this.state = {
+      showButton: true,
+      showAddModal: false
+    };
+  }
 
-  handleModal = () => {
-    this.setState({ showAddModal : true})
+  handleModal = (param1) => {
+    this.setState({ showAddModal: param1 })
   };
 
   handleAddUser = () =>{
@@ -30,14 +34,14 @@ class App extends Component{
     let addmodal = null;
     if (this.state.showAddModal){
       addmodal = (
-        <Add />
+        <Add action={this.handleModal} />
       ) 
     }
     
       if (this.state.showButton) {
         return (
         <div >
-            <Control type="Add" color="success"  clicked={this.handleAddUser} openmodal={this.handleModal} />
+            <Control type="Add" color="success"  clicked={this.handleAddUser} openmodal={() => this.handleModal(true)} />
             <Control type="Refresh" color="primary" />
             {addmodal}
             <div className="container">
