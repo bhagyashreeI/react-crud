@@ -7,7 +7,7 @@ class Control extends Component {
     render(){
         return (
             <Hoc>
-                <button className={"button m10-left m10-top btn-sm " + this.props.color + " " + this.props.customcls} onClick={this.props.openmodal}>
+                <button className={"button m10-left m10-top btn-sm " + this.props.color + " " + this.props.customcls} onClick={this.props.clickmethod}>
                     {this.props.type} 
                 </button>
             </Hoc>

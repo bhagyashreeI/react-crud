@@ -1,62 +1,118 @@
-import React, {Component} from "react";
+import React, { Component, useState } from "react";
 import User from "./User/User";
 import axios from 'axios';
 import Control from "../../components/Controls/Control";
 import Add from '../../components/Controls/Modal/Add/Add';
 
-class Users extends Component{
+class Users extends Component {
 
-    
-    constructor(props) {
-        super(props)
-        this.handleModal = this.handleModal.bind(this);
-        this.state = {
-            userlist: [],
-            showButton: true,
-            showAddModal: false
-        };
+    state = {
+        userlist: [],
+        user:{},
+        showButton: true,
+        showAddModal: false,
+        udata: {
+            name: '',
+            email: ''
+        },
+        usermodaltitle:''
     }
-    handleModal = (param1) => {
-        this.setState({ showAddModal: param1 })
+
+
+    handleModal = (param1,mtitle) => {
+        if(mtitle == 'Add'){
+            this.setState({ user: {} });
+        }
+        this.setState({ showAddModal: param1 });
+        this.setState({usermodaltitle:mtitle});
+        
     };
 
-    handleAddUser = () => {
-        let ucnt = this.state.users.length;
-        let newcnt = ucnt + 1;
-        let uid = 'p' + newcnt;
-        let newuser = { id: uid, name: 'test4', age: 36 };
-        const users = [...this.state.users];
-        users.push(newuser);
-        this.setState({ users: users });
+    handleSaveUser = (modalstatus, userdata,ustatus) => {
+        console.log("userdata", userdata);
+        console.log("ustatus", ustatus);
+        //return false;
+        const users = [...this.state.userlist];
+        if (ustatus == 'Add'){
+            let ucnt = this.state.userlist.length;
+            let newcnt = ucnt + 1;
+            let uid = 'p' + newcnt;
+            let newuser = { id: uid, name: userdata.name, email: userdata.email };
+            users.push(newuser);
+        }
+        if (ustatus == 'Edit') {
+            const uIndex = this.state.userlist.findIndex((u) => {
+                return u.id === this.state.user.id;
+            });
+            
+            const user = { ...this.state.userlist[uIndex] };
+            user.name = userdata.name;
+            user.email = userdata.email;
+            
+            users[uIndex] = user;
+            
+        }
+        
+        
+        this.setState({ userlist: users });
+
+        if (modalstatus == false) {
+            this.setState({ showAddModal: modalstatus })
+        }
+        
     }
 
-    componentDidMount(){
-        axios.get('https://jsonplaceholder.typicode.com/users')
+    handleEditUser = (param1) => {
+        
+        axios.get('https://jsonplaceholder.typicode.com/users?id=' + param1)
             .then(res => {
-                const userlist = res.data;
-                console.log(res.data);
-                this.setState({ userlist: userlist });
+                const user = res.data;
+                this.setState({ user: user[0] });
+                console.log(this.state.user);
+                this.handleModal(true, 'Edit')
             })
     }
 
-    render(){
+    fetchData() {
+        setTimeout(() => {
+            console.log('Our data is fetched');
+            axios.get('https://jsonplaceholder.typicode.com/users')
+                .then(res => {
+                    const userlist = res.data;
+                    console.log(res.data);
+                    this.setState({ userlist: userlist });
+                    this.setState({ user: userlist[0] });
+                })
+        }, 1000)
+    }
+
+    componentDidMount() {
+        this.fetchData();
+    }
+
+    render() {
         let addmodal = null;
         if (this.state.showAddModal) {
             addmodal = (
-                <Add action={this.handleModal} />
+                <Add action={this.handleModal} saveclose={this.handleSaveUser}
+                    savenext={this.handleSaveUser} title={this.state.usermodaltitle}
+                    uinfo={this.state.user}
+                />
             )
         }
         let ulist = this.state.userlist.map((p, index) => {
+            //console.log(p.id);
             return <User
                 name={p.name}
                 email={p.email}
-                key={p.id}>
+                key={p.id}
+                edituser={()=>this.handleEditUser(p.id)}>
             </User>
         });
         return (
             <div>
                 {addmodal}
-                
+
                 <div className="container">
                     <h3 className="p-3 text-center">Users</h3>
                     <table className="table table-striped table-bordered">
@@ -64,7 +120,7 @@ class Users extends Component{
                             <tr>
                                 <th></th>
                                 <th></th>
-                                <th><Control type="Add" color="primary" clicked={this.handleAddUser} openmodal={() => this.handleModal(true)} /></th>
+                                <th><Control type="Add" color="primary" clickmethod={() => this.handleModal(true,'Add')} /></th>
                             </tr>
                             <tr>
                                 <th>Name</th>
@@ -78,7 +134,7 @@ class Users extends Component{
                     </table>
                 </div>
             </div>
-            
+
         )
     }
 }
