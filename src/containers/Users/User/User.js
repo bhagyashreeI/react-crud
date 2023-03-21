@@ -9,9 +9,8 @@ class User extends Component {
                 <td>{this.props.name}</td>
                 <td>{this.props.email}</td>
                 <td>
-                    
                     <Control type="Edit" color="primary" clickmethod={() => this.props.edituser(this)} />
-                    <Control type="Delete" color="danger" />
+                    <Control type="Delete" color="danger" clickmethod={() => this.props.deluser(this.props.id)} />
                 </td>
             </tr>
 

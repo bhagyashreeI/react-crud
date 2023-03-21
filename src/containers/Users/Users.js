@@ -68,9 +68,14 @@ class Users extends Component {
             .then(res => {
                 const user = res.data;
                 this.setState({ user: user[0] });
-                console.log(this.state.user);
                 this.handleModal(true, 'Edit')
             })
+    }
+
+    handleDelUser = (param1) => {
+        const users = [...this.state.userlist];
+        users.splice(param1, 1); 
+        this.setState({ userlist: users });
     }
 
     fetchData() {
@@ -79,7 +84,6 @@ class Users extends Component {
             axios.get('https://jsonplaceholder.typicode.com/users')
                 .then(res => {
                     const userlist = res.data;
-                    console.log(res.data);
                     this.setState({ userlist: userlist });
                     this.setState({ user: userlist[0] });
                 })
@@ -101,12 +105,12 @@ class Users extends Component {
             )
         }
         let ulist = this.state.userlist.map((p, index) => {
-            //console.log(p.id);
             return <User
                 name={p.name}
                 email={p.email}
                 key={p.id}
-                edituser={()=>this.handleEditUser(p.id)}>
+                edituser={()=>this.handleEditUser(p.id)}
+                deluser={()=>this.handleDelUser(index)}>
             </User>
         });
         return (
